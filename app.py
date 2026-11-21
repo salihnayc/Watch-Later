@@ -1,3 +1,4 @@
+from helpers import fetchVideo, sendJson
 from flask import Flask, render_template, request, make_response
 from urllib.parse import urlsplit, parse_qs
 
@@ -36,9 +37,7 @@ def index():
 
 @app.route("/api/list")
 def list():
-    response = make_response(videos)
-    response.headers["Content-Type"] = "application/json"
-    return response
+    return sendJson(videos)
 
 
 @app.route("/api/add", methods=["POST"])
@@ -46,25 +45,32 @@ def add():
     url = request.form.get("url")
     if not url:
         message = {"error": {"message": "URL is required"}}
-        response = make_response(message,400)
-        response.headers["Content-Type"] = "application/json"
-        return response
+        return sendJson(message,400)
 
     u = urlsplit(url)
-    print(u)
     if u.scheme != "https":
         message = {"error": {"message": "URL is not valid"}}
-        response = make_response(message,400)
-        response.headers["Content-Type"] = "application/json"
-        return response
+        return sendJson(message,400)
 
     if u.netloc in ["www.youtube.com", "youtube.com"]:
         q = parse_qs(u.query)
-        return q["v"]
+        result = fetchVideo(q["v"][0])
+
+        if not "error" in result:
+            videos.append(result)
+            return sendJson(result)
+        
+        return sendJson(result, 400)
+    
     elif u.netloc == "youtu.be":
-        return u.path
+        result = fetchVideo(u.path.replace("/", ""))
+
+        if not "error" in result:
+            videos.append(result)
+            return sendJson(result)
+
+        return sendJson(result, 400)
+    
     else:
         message = {"error": {"message": "URL is not valid"}}
-        response = make_response(message,400)
-        response.headers["Content-Type"] = "application/json"
-        return response
+        return sendJson(message,400)
