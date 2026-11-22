@@ -1,4 +1,5 @@
-from helpers import fetchVideo, sendJson
+from cs50 import SQL
+from helpers import fetchVideo, sendJson, appendVideo
 from flask import Flask, render_template, request, make_response
 from urllib.parse import urlsplit, parse_qs
 
@@ -6,22 +7,7 @@ app = Flask(__name__)
 
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
-videos = [
-        {
-            "thumbnail": "todo",
-            "title": "Example Video",
-            "channel": "Example Channel",
-            "description": "Example Description",
-            "duration": "todo" 
-        },
-        {
-            "thumbnail": "todo",
-            "title": "Example Video 2",
-            "channel": "Example Channel 2",
-            "description": "Example Description 2",
-            "duration": "todo"
-        }
-    ]
+db = SQL("sqlite:///watch.db")
 
 @app.after_request
 def after_request(response):
@@ -37,6 +23,7 @@ def index():
 
 @app.route("/api/list")
 def list():
+    videos = db.execute("SELECT videos.id as videoId, videos.title as videoTitle, videos.description as videoDescription, videos.duration, channels.id as channelId, channels.title as channelTitle, channels.description as channelDescription, channels.customUrl FROM videos JOIN channels ON videos.channelId = channels.id")
     return sendJson(videos)
 
 
@@ -54,20 +41,18 @@ def add():
 
     if u.netloc in ["www.youtube.com", "youtube.com"]:
         q = parse_qs(u.query)
-        result = fetchVideo(q["v"][0])
+        result = appendVideo(db, q["v"][0])
 
         if not "error" in result:
-            videos.append(result)
             return sendJson(result)
         
         return sendJson(result, 400)
     
     elif u.netloc == "youtu.be":
-        result = fetchVideo(u.path.replace("/", ""))
+        result = appendVideo(db, u.path.replace("/", ""))
 
         if not "error" in result:
-            videos.append(result)
-            return sendJson(result)
+            return sendJson(result, 201)
 
         return sendJson(result, 400)
     
