@@ -1,5 +1,6 @@
 const table = document.querySelector("#videoTableBody")
 const form = document.querySelector("#addVideoForm")
+const formError = document.querySelector("#formError")
 
 form.addEventListener("submit", event => {
     event.preventDefault();
@@ -8,9 +9,15 @@ form.addEventListener("submit", event => {
     fetch("/api/add", {method: "POST", body: formData})
         .then(response => response.json())
         .then(data => {
-            list()
+            if (data.error) {
+                throw new Error(data.error.message);
+            }
+            else {
+                formError.innerHTML = ""
+                list();
+            }
         })
-        .catch(error => {console.error('Error:', error)});
+        .catch(error => formError.innerHTML = error);
 })
 
 function list() {
