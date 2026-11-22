@@ -26,7 +26,7 @@ function list() {
         .then(response => response.json())
         .then(data => {
             data.forEach(d => {
-                table.innerHTML += `<tr><td>${d.videoTitle}</td><td>${d.channelTitle}</td><td>${d.videoDescription}</td><td>${d.duration}</td><td><a href="https://youtu.be/${d.videoId}">Video</a></td><td><a href="https://www.youtube.com/${d.customUrl}">Channel</a></td></tr>`
+                table.innerHTML += `<tr><td><img src="/static/thumbnails/${d.videoId}.jpg"></td><td>${d.videoTitle}</td><td>${d.channelTitle}</td><td><img src="/static/thumbnails/${d.channelId}.jpg"></td><td>${d.videoDescription}</td><td>${d.duration}</td><td><a href="https://youtu.be/${d.videoId}">Video</a></td><td><a href="https://www.youtube.com/channel/${d.channelId}">Channel</a></td></tr>`
             });
         })
         .catch(error => console.error('Error:', error));

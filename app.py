@@ -23,7 +23,7 @@ def index():
 
 @app.route("/api/list")
 def list():
-    videos = db.execute("SELECT videos.id as videoId, videos.title as videoTitle, videos.description as videoDescription, videos.duration, channels.id as channelId, channels.title as channelTitle, channels.description as channelDescription, channels.customUrl FROM videos JOIN channels ON videos.channelId = channels.id")
+    videos = db.execute("SELECT videos.id as videoId, videos.title as videoTitle, videos.description as videoDescription, videos.duration, channels.id as channelId, channels.title as channelTitle, channels.description as channelDescription FROM videos JOIN channels ON videos.channelId = channels.id")
     return sendJson(videos)
 
 
