@@ -20,6 +20,20 @@ form.addEventListener("submit", event => {
         .catch(error => formError.innerHTML = error);
 })
 
+function formatTime(time) {
+    time = time.replace("PT", "")
+    time = time.replace("H", ":")
+    time = time.replace("M", ":")
+    time = time.replace("S", "")
+
+    s = time.split(":")
+
+    for (let i = 1; i < s.length; i++) {
+        if (s[i].length === 1) s[i] = "0" + s[i]
+    }
+    return s.join(":")
+}
+
 function list() {
     cardHolder.innerHTML = ""
     fetch("/api/list")
@@ -28,6 +42,7 @@ function list() {
             cardHolder.innerHTML = data.map(d => `<article class="card">
                 <a class="card-media" href="${d.videoUrl} " target="_blank">
                     <img class="card-thumb" src="${d.videoThumbnail}" loading="lazy">
+                    <span class="card-duration">${formatTime(d.duration)}</span>
                 </a>
                 <div class="card-body">
                     <img class="card-avatar" src="${d.channelLogo}" loading="lazy">
