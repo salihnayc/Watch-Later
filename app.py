@@ -65,3 +65,22 @@ def add():
     else:
         message = {"error": {"message": "URL is not valid"}}
         return sendJson(message,400)
+
+@app.route("/api/remove", methods=["DELETE"])
+def remove():
+    id = request.form.get("id")
+    if not id:
+        message = {"error": {"message": "id is required"}}
+        return sendJson(message,400)
+
+    deleted = db.execute("DELETE FROM videos WHERE id=?",id)
+    if deleted:
+        # Remove unnecessary channels if any
+        db.execute("DELETE FROM channels WHERE id IN (SELECT id FROM channels WHERE id NOT IN (SELECT channelId FROM videos))")
+        
+        message = {"success": {"message": f"video {id} deleted"}}
+        return sendJson(message)
+    else:
+        message = {"error": {"message": f"video {id} is not found"}}
+        return sendJson(message, 404)
+    
