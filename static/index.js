@@ -1,4 +1,4 @@
-const table = document.querySelector("#videoTableBody")
+const cardHolder = document.querySelector("#card-holder")
 const form = document.querySelector("#addVideoForm")
 const formError = document.querySelector("#formError")
 
@@ -21,13 +21,24 @@ form.addEventListener("submit", event => {
 })
 
 function list() {
-    table.innerHTML = ""
+    cardHolder.innerHTML = ""
     fetch("/api/list")
         .then(response => response.json())
         .then(data => {
-            data.forEach(d => {
-                table.innerHTML += `<tr><td><img src="/static/thumbnails/${d.videoId}.jpg"></td><td>${d.videoTitle}</td><td>${d.channelTitle}</td><td><img src="/static/thumbnails/${d.channelId}.jpg"></td><td>${d.videoDescription}</td><td>${d.duration}</td><td><a href="https://youtu.be/${d.videoId}">Video</a></td><td><a href="https://www.youtube.com/channel/${d.channelId}">Channel</a></td></tr>`
-            });
+            cardHolder.innerHTML = data.map(d => `<article class="card">
+                <a class="card-media" href="${d.videoUrl} " target="_blank">
+                    <img class="card-thumb" src="${d.videoThumbnail}" loading="lazy">
+                </a>
+                <div class="card-body">
+                    <img class="card-avatar" src="${d.channelLogo}" loading="lazy">
+                    <div class="card-meta">
+                        <h2 class="card-title">
+                            <a href="${d.videoUrl}" target="_blank">${d.videoTitle}</a>
+                        </h2>
+                        <a class="card-channel" href="${d.channelUrl}" target="_blank">${d.channelTitle}</a>
+                    </div>
+                </div>
+            </article>`).join("");
         })
         .catch(error => console.error('Error:', error));
 }

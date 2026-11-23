@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/styles.css">
     <title>Watch Later</title>
 </head>
 <body>
@@ -17,23 +18,10 @@
             <button type="submit">Add</button>
         </form>
         <p id="formError"></p>
-        <table>
-            <thead>
-                <tr>
-                    <th>Thumbnail</th>
-                    <th>Title</th>
-                    <th>Channel</th>
-                    <th>Channel Logo</th>
-                    <th>Description</th>
-                    <th>Duration</th>
-                    <th>Video Link</th>
-                    <th>Channel Link</th>
-                </tr>
-            </thead>
-            <tbody id="videoTableBody">
 
-            </tbody>
-        </table>
+        <div id="card-holder"> 
+            <p>There are no videos.</p>
+        </div>
     </main>
 
     <script src="/static/index.js"></script>

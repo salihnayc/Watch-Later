@@ -24,6 +24,12 @@ def index():
 @app.route("/api/list")
 def list():
     videos = db.execute("SELECT videos.id as videoId, videos.title as videoTitle, videos.description as videoDescription, videos.duration, channels.id as channelId, channels.title as channelTitle, channels.description as channelDescription FROM videos JOIN channels ON videos.channelId = channels.id")
+    for v in videos:
+        v["videoThumbnail"] = f"/static/thumbnails/{v["videoId"]}.jpg"
+        v["channelLogo"] = f"/static/thumbnails/{v["channelId"]}.jpg"
+        v["videoUrl"] = f"https://youtu.be/{v["videoId"]}"
+        v["channelUrl"] = f"https://www.youtube.com/channel/{v["channelId"]}"
+
     return sendJson(videos)
 
 
