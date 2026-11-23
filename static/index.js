@@ -20,6 +20,13 @@ form.addEventListener("submit", event => {
         .catch(error => formError.innerHTML = error);
 })
 
+function removeVideo(id) {
+    const data = new FormData();
+    data.append("id", id);
+    fetch("/api/remove", {method: "DELETE", body: data})
+        .then(() => list());
+}
+
 function formatTime(time) {
     time = time.replace("PT", "")
     time = time.replace("H", ":")
@@ -35,7 +42,7 @@ function formatTime(time) {
 }
 
 function list() {
-    cardHolder.innerHTML = ""
+    cardHolder.innerHTML = "There are no videos"
     fetch("/api/list")
         .then(response => response.json())
         .then(data => {
@@ -54,6 +61,7 @@ function list() {
                         <a class="card-channel" href="${d.channelUrl}" target="_blank">${d.channelTitle}</a>
                     </div>
                 </div>
+                <button class="card-delete" onclick="removeVideo('${d.videoId}')">DELETE</button>
             </article>`).join("");
         })
         .catch(error => console.error('Error:', error));
