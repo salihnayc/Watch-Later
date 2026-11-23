@@ -95,9 +95,20 @@ def appendVideo(db, id):
         
         db.execute("INSERT INTO channels VALUES (?, ?, ?)", 
                    channel["id"], channel["title"], channel["description"])
-    
-    db.execute("INSERT INTO videos VALUES (?, ?, ?, ?, ?)", 
-                video["id"], video["title"], video["channelId"], video["description"], video["duration"])
+    else:
+        channel = {
+            "id": c[0]["id"],
+            "title": c[0]["title"],
+            "description": c[0]["description"]
+        }
+
+    try:
+        db.execute("INSERT INTO videos VALUES (?, ?, ?, ?, ?)", 
+                    video["id"], video["title"], video["channelId"], video["description"], video["duration"])
+    except ValueError:
+        return {
+            "error": {"message": f"Video '{video["title"]}' already exists."}
+        }
 
     return {
         "videoId": video["id"],

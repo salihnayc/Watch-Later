@@ -39,6 +39,7 @@ function list() {
     fetch("/api/list")
         .then(response => response.json())
         .then(data => {
+            data.sort((a, b) => a.channelTitle.localeCompare(b.channelTitle, {sensitivity: "base"}) || a.videoTitle.localeCompare(b.videoTitle, {sensitivity: "base"}))
             cardHolder.innerHTML = data.map(d => `<article class="card">
                 <a class="card-media" href="${d.videoUrl} " target="_blank">
                     <img class="card-thumb" src="${d.videoThumbnail}" loading="lazy">

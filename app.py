@@ -2,6 +2,7 @@ from cs50 import SQL
 from helpers import fetchVideo, sendJson, appendVideo
 from flask import Flask, render_template, request, make_response
 from urllib.parse import urlsplit, parse_qs
+import os
 
 app = Flask(__name__)
 
@@ -75,8 +76,20 @@ def remove():
 
     deleted = db.execute("DELETE FROM videos WHERE id=?",id)
     if deleted:
+        # Remove thumbnail
+        try:
+            os.remove(f"static/thumbnails/{id}.jpg")
+        except FileNotFoundError:
+            print(f"Cannot remove 'static/thumbnails/{id}.jpg': Doesn't exists.")
+
         # Remove unnecessary channels if any
-        db.execute("DELETE FROM channels WHERE id IN (SELECT id FROM channels WHERE id NOT IN (SELECT channelId FROM videos))")
+        unnecessary = db.execute("SELECT id FROM channels WHERE id NOT IN (SELECT channelId FROM videos)")
+        if unnecessary:
+            db.execute("DELETE FROM channels WHERE id= ?", unnecessary[0]["id"])
+            try:
+                os.remove(f"static/thumbnails/{unnecessary[0]["id"]}.jpg")
+            except FileNotFoundError:
+                print(f"Cannot remove 'static/thumbnails/{unnecessary[0]["id"]}.jpg': Doesn't exists.")
         
         message = {"success": {"message": f"video {id} deleted"}}
         return sendJson(message)
