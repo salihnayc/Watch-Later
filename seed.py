@@ -21,7 +21,7 @@ for id in ids:
                 print(channel)
                 continue
     
-        db.execute("INSERT INTO channels VALUES (?, ?, ?)", channel["id"], channel["title"], channel["description"])
+        db.execute("INSERT INTO channels VALUES (?, ?)", channel["id"], channel["title"])
 
     db.execute("INSERT INTO videos VALUES (?, ?, ?, ?, ?)", 
                video["id"], video["title"], video["channelId"], video["description"], video["duration"])

@@ -22,9 +22,13 @@ def after_request(response):
 def index():
     return render_template("index.html")
 
-@app.route("/api/list")
+@app.route("/details/<id>")
+def details(id):
+    return render_template("details.html")
+
+@app.route("/api/videos")
 def list():
-    videos = db.execute("SELECT videos.id as videoId, videos.title as videoTitle, videos.description as videoDescription, videos.duration, channels.id as channelId, channels.title as channelTitle, channels.description as channelDescription FROM videos JOIN channels ON videos.channelId = channels.id")
+    videos = db.execute("SELECT videos.id as videoId, videos.title as videoTitle, videos.description as videoDescription, videos.duration as videoDuration, channels.id as channelId, channels.title as channelTitle FROM videos JOIN channels ON videos.channelId = channels.id")
     for v in videos:
         v["videoThumbnail"] = f"/static/thumbnails/{v["videoId"]}.jpg"
         v["channelLogo"] = f"/static/thumbnails/{v["channelId"]}.jpg"
@@ -33,6 +37,19 @@ def list():
 
     return sendJson(videos)
 
+@app.route("/api/video/<id>")
+def video(id):
+    video = db.execute("SELECT videos.id as videoId, videos.title as videoTitle, videos.description as videoDescription, videos.duration as videoDuration, channels.id as channelId, channels.title as channelTitle FROM videos JOIN channels ON videos.channelId = channels.id WHERE videos.id = ?", id)
+    if not video:
+        message = {"error": {"message": f"Video {id} is not found"}}
+        return sendJson(message, 404)
+    
+    video[0]["videoThumbnail"] = f"/static/thumbnails/{video[0]["videoId"]}.jpg"
+    video[0]["channelLogo"] = f"/static/thumbnails/{video[0]["channelId"]}.jpg"
+    video[0]["videoUrl"] = f"https://youtu.be/{video[0]["videoId"]}"
+    video[0]["channelUrl"] = f"https://www.youtube.com/channel/{video[0]["channelId"]}"
+
+    return sendJson(video[0])
 
 @app.route("/api/add", methods=["POST"])
 def add():

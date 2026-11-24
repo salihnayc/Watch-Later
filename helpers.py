@@ -71,8 +71,7 @@ def fetchChannel(id):
         downloadThumbnail(data["items"][0]["snippet"]["thumbnails"]["high"]["url"], data["items"][0]["id"])
         return {
             "id": data["items"][0]["id"],
-            "title": data["items"][0]["snippet"]["title"],
-            "description": data["items"][0]["snippet"]["description"]
+            "title": data["items"][0]["snippet"]["title"]
         }
     except requests.RequestException as e:
         return {
@@ -93,13 +92,12 @@ def appendVideo(db, id):
         if "error" in channel:
             return channel
         
-        db.execute("INSERT INTO channels VALUES (?, ?, ?)", 
-                   channel["id"], channel["title"], channel["description"])
+        db.execute("INSERT INTO channels VALUES (?, ?)", 
+                   channel["id"], channel["title"])
     else:
         channel = {
             "id": c[0]["id"],
-            "title": c[0]["title"],
-            "description": c[0]["description"]
+            "title": c[0]["title"]
         }
 
     try:
@@ -114,10 +112,9 @@ def appendVideo(db, id):
         "videoId": video["id"],
         "videoTitle": video["title"],
         "videoDescription": video["description"],
-        "duration": video["duration"],
+        "videoDuration": video["duration"],
         "channelId": channel["id"],
-        "channelTitle": channel["title"],
-        "channelDescription": channel["description"]
+        "channelTitle": channel["title"]
     }
 
 def sendJson(json, code=200):

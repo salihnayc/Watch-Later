@@ -43,15 +43,19 @@ function formatTime(time) {
 
 function list() {
     cardHolder.innerHTML = "There are no videos"
-    fetch("/api/list")
+    fetch("/api/videos")
         .then(response => response.json())
         .then(data => {
             data.sort((a, b) => a.channelTitle.localeCompare(b.channelTitle, {sensitivity: "base"}) || a.videoTitle.localeCompare(b.videoTitle, {sensitivity: "base"}))
             cardHolder.innerHTML = data.map(d => `<article class="card">
                 <a class="card-media" href="${d.videoUrl} " target="_blank">
                     <img class="card-thumb" src="${d.videoThumbnail}" loading="lazy">
-                    <span class="card-duration">${formatTime(d.duration)}</span>
-                </a>
+                    <span class="card-duration">${formatTime(d.videoDuration)}</span>
+                </a>     
+                <div class="card-buttons">
+                    <button onclick="removeVideo('${d.videoId}')">DELETE</button>
+                    <a href="details/${d.videoId}">DETAILS</a>
+                </div>
                 <div class="card-body">
                     <img class="card-avatar" src="${d.channelLogo}" loading="lazy">
                     <div class="card-meta">
@@ -61,7 +65,6 @@ function list() {
                         <a class="card-channel" href="${d.channelUrl}" target="_blank">${d.channelTitle}</a>
                     </div>
                 </div>
-                <button class="card-delete" onclick="removeVideo('${d.videoId}')">DELETE</button>
             </article>`).join("");
         })
         .catch(error => console.error('Error:', error));
