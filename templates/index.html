@@ -8,16 +8,17 @@
 </head>
 <body>
     <header>
-        <h1>Watch Later</h1>
+        <h1><a href="/">Watch Later</a></h1>
     </header>
 
     <main>
-        <form id="addVideoForm">
-            <label for="url">Video URL:</label>
-            <input type="text" autocomplete="off" name="url" id="url" placeholder="Video URL">
-            <button type="submit">Add</button>
-        </form>
-        <p id="formError"></p>
+        <div id="form-div">
+            <form id="addVideoForm">
+                <input type="text" autocomplete="off" name="url" id="url" placeholder="Video URL">
+                <button type="submit">Add</button>
+            </form>
+            <p id="formError"></p>
+        </div>
 
         <div id="card-holder"> 
             <p>There are no videos.</p>
