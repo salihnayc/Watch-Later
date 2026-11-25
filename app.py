@@ -1,8 +1,11 @@
 from cs50 import SQL
+from dotenv import load_dotenv
 from helpers import fetchVideo, sendJson, appendVideo
 from flask import Flask, render_template, request, make_response
 from urllib.parse import urlsplit, parse_qs
 import os
+
+load_dotenv()
 
 app = Flask(__name__)
 
