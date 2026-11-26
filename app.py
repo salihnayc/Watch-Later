@@ -40,7 +40,7 @@ def list():
 
     return sendJson(videos)
 
-@app.route("/api/video/<id>")
+@app.route("/api/videos/<id>")
 def video(id):
     video = db.execute("SELECT videos.id as videoId, videos.title as videoTitle, videos.description as videoDescription, videos.duration as videoDuration, channels.id as channelId, channels.title as channelTitle FROM videos JOIN channels ON videos.channelId = channels.id WHERE videos.id = ?", id)
     if not video:

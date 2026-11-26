@@ -20,7 +20,7 @@ function formatDescription(description) {
     return description.replaceAll("\n", "<br />")
 }
 
-fetch(`/api/video/${id}`)
+fetch(`/api/videos/${id}`)
     .then(response => response.json())
     .then(data => {
         if (data.error) {
