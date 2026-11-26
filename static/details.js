@@ -33,7 +33,7 @@ fetch(`/api/video/${id}`)
                     <span class="card-duration">${formatTime(data.videoDuration)}</span>
                 </a>   
                 <div class="card-body">
-                    <img class="card-avatar" src="${data.channelLogo}" loading="lazy">
+                    <a class="avatar-link" href="${data.channelUrl}" target="_blank"><img class="card-avatar" src="${data.channelLogo}" loading="lazy"></a>
                     <div class="card-meta">
                         <h2 class="card-title">
                             <a href="${data.videoUrl}" target="_blank">${data.videoTitle}</a>

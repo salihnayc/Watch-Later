@@ -1,5 +1,5 @@
 :root {
-  --card-min-width: 480px;
+  --card-min-width: 380px;
   --grid-gap: 24px 16px;
   --radius: 12px;
   --avatar-size: 72px;
@@ -97,12 +97,13 @@ main {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(var(--card-min-width), 1fr));
   gap: var(--grid-gap);
+  max-width: 100%;
 }
 
 .card {
   min-width: 0;
   background-color: var(--card-background);
-  border-radius: var(--radius) var(--radius) var(--radius) calc(var(--avatar-size) / 2);
+  border-radius: var(--radius);
 }
 
 .card-media {
@@ -137,11 +138,17 @@ main {
   margin-top: 12px;
 }
 
+.avatar-link {
+  margin: 0;
+  padding: 0;
+  line-height: 0;
+}
+
 .card-avatar {
   flex: 0 0 var(--avatar-size);
   width: var(--avatar-size);
   height: var(--avatar-size);
-  border-radius: 50%;
+  border-radius: var(--radius);
   object-fit: cover;
 }
 
@@ -149,7 +156,6 @@ main {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 4px;
   min-width: 0;
 }
 

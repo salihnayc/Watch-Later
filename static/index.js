@@ -57,7 +57,7 @@ function list() {
                     <a href="details/${d.videoId}">DETAILS</a>
                 </div>
                 <div class="card-body">
-                    <img class="card-avatar" src="${d.channelLogo}" loading="lazy">
+                    <a class="avatar-link" href="${d.channelUrl}" target="_blank"><img class="card-avatar" src="${d.channelLogo}" loading="lazy"></a>
                     <div class="card-meta">
                         <h2 class="card-title">
                             <a href="${d.videoUrl}" target="_blank">${d.videoTitle}</a>
