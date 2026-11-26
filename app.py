@@ -11,7 +11,7 @@ app = Flask(__name__)
 
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
-db = SQL("sqlite:///watch.db")
+db = SQL(f"sqlite:///{os.getenv("DATABASE")}")
 
 @app.after_request
 def after_request(response):
