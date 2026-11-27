@@ -254,3 +254,7 @@ main {
     width: 100%;
   }
 }
+
+footer p {
+  text-align: center;
+}
