@@ -2,3 +2,4 @@ Flask
 requests
 cs50
 python-dotenv
+waitress
