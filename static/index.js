@@ -6,7 +6,10 @@ form.addEventListener("submit", event => {
     event.preventDefault();
     const formData = new FormData(form);
     
-    fetch("/api/videos", {method: "POST", body: formData})
+    payload = {
+        url: formData.get("url")
+    }
+    fetch("/api/videos", {method: "POST", body: JSON.stringify(payload), headers: {"Content-Type": "application/json;"}})
         .then(response => response.json())
         .then(data => {
             if (data.error) {

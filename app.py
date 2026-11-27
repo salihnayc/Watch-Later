@@ -43,7 +43,17 @@ def videos():
 
         return sendJson(videos)
     else:
-        url = request.form.get("url")
+        if not request.is_json:
+            message = {"error": {"message": "Body must be json"}}
+            return sendJson(message, 400)
+        
+        try:
+            data = request.get_json()
+        except Exception as e:
+            message = {"error": {"message": f"Error while parsing json:{e}"}}
+            return sendJson(message, 400)
+        
+        url = data["url"]
         if not url:
             message = {"error": {"message": "URL is required"}}
             return sendJson(message,400)
