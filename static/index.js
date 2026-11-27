@@ -6,7 +6,7 @@ form.addEventListener("submit", event => {
     event.preventDefault();
     const formData = new FormData(form);
     
-    fetch("/api/add", {method: "POST", body: formData})
+    fetch("/api/videos", {method: "POST", body: formData})
         .then(response => response.json())
         .then(data => {
             if (data.error) {
@@ -21,9 +21,7 @@ form.addEventListener("submit", event => {
 })
 
 function removeVideo(id) {
-    const data = new FormData();
-    data.append("id", id);
-    fetch("/api/remove", {method: "DELETE", body: data})
+    fetch(`/api/videos/${id}`, {method: "DELETE"})
         .then(() => list());
 }
 
