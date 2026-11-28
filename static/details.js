@@ -26,6 +26,7 @@ fetch(`/api/videos/${id}`)
         if (data.error) {
             throw new Error(data.error.message);
         }
+        document.title = data.videoTitle;
         box.innerHTML = `
             <div class="details-card card">
                 <a class="card-media" href="${data.videoUrl} " target="_blank">
