@@ -1,8 +1,11 @@
 const cardHolder = document.querySelector("#card-holder")
 const form = document.querySelector("#addVideoForm")
 const formError = document.querySelector("#formError")
+const formButton = document.querySelector("#formButton")
+const urlInput = document.querySelector("#url")
 
 form.addEventListener("submit", event => {
+    formButton.disabled = true;
     event.preventDefault();
     const formData = new FormData(form);
     
@@ -12,6 +15,8 @@ form.addEventListener("submit", event => {
     fetch("/api/videos", {method: "POST", body: JSON.stringify(payload), headers: {"Content-Type": "application/json;"}})
         .then(response => response.json())
         .then(data => {
+            formButton.disabled = false;
+            urlInput.value = ""
             if (data.error) {
                 throw new Error(data.error.message);
             }

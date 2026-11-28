@@ -88,6 +88,10 @@ main {
   color: whitesmoke;
 }
 
+#addVideoForm button:disabled {
+  background-color: gray;
+}
+
 #formError{
   color: red;
   text-align: center;

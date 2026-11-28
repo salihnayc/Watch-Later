@@ -33,6 +33,7 @@ def details(id):
 # Handle listing all videos or adding a new
 @app.route("/api/videos", methods=["GET", "POST"])
 def videos():
+    # Return all the videos in database
     if request.method == "GET":
         videos = db.execute("SELECT videos.id as videoId, videos.title as videoTitle, videos.description as videoDescription, videos.duration as videoDuration, channels.id as channelId, channels.title as channelTitle FROM videos JOIN channels ON videos.channelId = channels.id")
         for v in videos:
@@ -118,12 +119,16 @@ def videos():
 # Handle listing a single video or delete it
 @app.route("/api/videos/<id>", methods=["GET", "DELETE"])
 def video(id):
+    # Return the requested video
     if request.method == "GET":
         video = db.execute("SELECT videos.id as videoId, videos.title as videoTitle, videos.description as videoDescription, videos.duration as videoDuration, channels.id as channelId, channels.title as channelTitle FROM videos JOIN channels ON videos.channelId = channels.id WHERE videos.id = ?", id)
+        
+        # Id is not in database
         if not video:
             message = {"error": {"message": f"Video {id} is not found"}}
             return sendJson(message, 404)
-        
+
+        # Add extra details
         video[0]["videoThumbnail"] = f"/static/thumbnails/{video[0]["videoId"]}.jpg"
         video[0]["channelLogo"] = f"/static/thumbnails/{video[0]["channelId"]}.jpg"
         video[0]["videoUrl"] = f"https://youtu.be/{video[0]["videoId"]}"
