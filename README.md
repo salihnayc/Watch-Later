@@ -1,7 +1,7 @@
 # Watch Later
 Video Demo: todo
 ## Description
-A Flask app for keeping a watchlist of Youtube videos. You can add videos with their URL. You can delete them. You can watch the video by clicking it or visit the channel. 
+A Flask app for keeping a watchlist of Youtube videos. You can add videos with their URL. You can add playlists. You can delete them. You can watch the video by clicking it or visit the channel. 
 
 Why did I create this app? Obviously you can use Youtube's playlist feature. But having a seperate app for keeping a list of videos you want to watch sounds cool and makes it independent from Youtube.
 
@@ -41,12 +41,17 @@ $ waitress-serve --host 127.0.0.1 app:app
 $ flask --debug run
 ```
 ## How to Use
-Add a video by pasting its URL into the input box.
-The videos will be displayed in a card layout.
-You can delete a video by clicking it's delete button or go to the video details by clicking the details button. 
-Details page contains a card full of video details and a box with video description.
-You can go to the video on Youtube by clicking it or go to the channel with clicking the channel section.
+Add a video by pasting a URL.
 
+![url image](images/url.png)
+
+Videos will be displayed in a card layout. You can delete them by clicking delete button or go to the details with details button. You can go to the video on Youtube by clicking it or go to the channel with clicking the channel.
+
+![card image](images/card.png)
+
+Details page contains a card full of video details and a box with video description.
+
+![details image](images/details.png)
 ## Project structure
 `app.py` Connects to the database and handles routes.
 
@@ -63,7 +68,6 @@ You can go to the video on Youtube by clicking it or go to the channel with clic
 `static/details.js` is connected to `templates/details.js`. It makes a http request with the video id in page url. Then appends the video details into empty div.
 
 ## Rest API
-This project uses a Rest API under the hood.
 | Method | Endpoint        | Purpose             | Success | Error   |
 |--------|-----------------|---------------------|---------|---------|
 | GET    | /api/videos     | List all videos     | 200     | -       |
