@@ -79,3 +79,10 @@ At first i have individual endpoints for every type of request. Like `/api/add` 
 
 ## Storing the data
 The database is pretty simple. It stores `video name`, `video description`, `video duration`, `video id`, `channel name`, `channel id` and information about which channel has the video. Thumbnails and channel logos stored in `static/thumbnails` with their video/channel id. Backend builds the information about thumbnail/channel logo location and video/channel links before sending a response. At first I thought about storing the thumbnails in the database. Then I realized you cannot send binary data with json. Storing them as files is simpler. Also storing video/channel links and thumbnail locations in the database is unnecessary. Backend can build them easily. 
+
+## Youtube Data API
+| Path          | Purpose                                                   |
+|---------------|-----------------------------------------------------------|
+| videos        | video title, description, duration, channel id, thumbnail |
+| channels      | channel title, logo                                       |
+| playlistItems | ids of the videos in playlist                             |
