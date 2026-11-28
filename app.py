@@ -1,6 +1,6 @@
 from cs50 import SQL
 from dotenv import load_dotenv
-from helpers import fetchVideo, sendJson, appendVideo
+from helpers import fetchVideo, sendJson, appendVideo, appendPlaylist
 from flask import Flask, render_template, request, make_response
 from urllib.parse import urlsplit, parse_qs
 import os
@@ -58,21 +58,51 @@ def videos():
             message = {"error": {"message": "URL is required"}}
             return sendJson(message,400)
 
-        # TODO: Make a better algorithm and add playlist support
         u = urlsplit(url)
         if u.scheme != "https":
             message = {"error": {"message": "URL is not valid"}}
             return sendJson(message,400)
-    
+
+        # Full link
         if u.netloc in ["www.youtube.com", "youtube.com"]:
-            q = parse_qs(u.query)
-            result = appendVideo(db, q["v"][0])
-    
-            if not "error" in result:
-                return sendJson(result)
+
+            # video link
+            if u.path == "/watch":
+                q = parse_qs(u.query)
+
+                # Link has a playlist
+                if "list" in q:
+                    result = appendPlaylist(db, q["list"][0])
             
-            return sendJson(result, 400)
-        
+                    if not "error" in result:
+                        return sendJson(result, 201)
+                    
+                    return sendJson(result, 400)
+
+                # Link has a video
+                elif "v" in q:
+                    result = appendVideo(db, q["v"][0])
+
+                    if not "error" in result:
+                        return sendJson(result, 201)
+
+                    return sendJson(result, 400)
+
+            # playlist link
+            elif u.path == "/playlist":
+                q = parse_qs(u.query)
+                if "list" in q:
+                    result = appendPlaylist(db, q["list"][0])
+
+                    if not "error" in result:
+                        return sendJson(result, 201)
+
+                    return sendJson(result, 400)
+                else:
+                    message = {"error": {"message": "URL is not valid"}}
+                    return sendJson(message,400)
+
+        # Short link
         elif u.netloc == "youtu.be":
             result = appendVideo(db, u.path.replace("/", ""))
     
